@@ -10,8 +10,7 @@ function createWindow () {
     }
   })
 
-//   win.loadFile('index.html')
-  win.loadURL('https://github.com')
+  win.loadFile(path.join(__dirname, 'index.html'))
 }
 
 app.whenReady().then(() => {

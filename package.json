@@ -1,12 +1,13 @@
 {
-  "name": "my-electron-app",
+  "name": "appstore",
   "version": "1.0.0",
-  "description": "Hello",
+  "description": "GPU appstore",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "author": "Simon Chuang",
   "license": "MIT",
@@ -16,6 +17,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.61",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "@electron-forge/publisher-github": "^6.0.0-beta.61",
     "electron": "^15.1.1"
   },
   "dependencies": {
@@ -28,7 +30,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "my_electron_app"
+            "name": "appstore"
           }
         },
         {
@@ -44,6 +46,18 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "erikhofer",
+              "name": "electron-publish-example",
+              "draft": true
+            }
+          }
         }
       ]
     }
