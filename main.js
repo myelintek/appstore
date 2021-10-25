@@ -1,31 +1,45 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
+// Modules
+const {app, BrowserWindow, ipcMain, dialog} = require('electron')
 
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow
+
+// Create a new BrowserWindow when `app` is ready
 function createWindow () {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+
+  mainWindow = new BrowserWindow({
+    width: 1000, height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      // --- !! IMPORTANT !! ---
+      // Disable 'contextIsolation' to allow 'nodeIntegration'
+      // 'contextIsolation' defaults to "true" as from Electron v12
+      contextIsolation: false,
+      nodeIntegration: true
     }
   })
 
-  win.loadFile(path.join(__dirname, 'index.html'))
+  // Load index.html into the new BrowserWindow
+  mainWindow.loadFile('index.html')
+
+  // Open DevTools - Remove for PRODUCTION!
+  // mainWindow.webContents.openDevTools();
+
+  // Listen for window being closed
+  mainWindow.on('closed',  () => {
+    mainWindow = null
+  })
 }
 
-app.whenReady().then(() => {
-  createWindow()
+// Electron `app` is ready
+app.on('ready', createWindow)
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
-
+// Quit when all windows are closed - (Not macOS - Darwin)
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit()
 })
 
+// When app icon is clicked and app is running, (macOS) recreate the BrowserWindow
+app.on('activate', () => {
+  if (mainWindow === null) createWindow()
+})
