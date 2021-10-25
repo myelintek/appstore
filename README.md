@@ -4,6 +4,8 @@
 git clone git@github.com:myelintek/appstore.git
 cd apptstore
 npm install
+npm install chart.js --save
+npm i gpu-info
 npm start
 ```
 # Get GPU Information
